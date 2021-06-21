@@ -141,9 +141,8 @@ jobs:
           name: Build the plugin
           command: |
             mkdir -p /tmp/artifacts
-            mkdir -p build/
-            zip -r woocommerce-latitudepay-genoapay.zip build/
-            cp -a build/*.zip /tmp/artifacts
+            zip -r magento-latitudepay.zip .
+            cp magento-latitudepay.zip /tmp/artifacts
       - run:
           name: Deploy the plugin
           command: |

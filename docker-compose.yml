@@ -3,8 +3,6 @@ version: "3"
 services:
   magento:
     image: registry.gitlab.com/magebinary/docker-opensource-ecommerce:magento-2.4.2-php-7.4
-    hostname: magento2.localhost
-    container_name: magento_latitude_magento
     working_dir: /var/www/html
     restart: always
     depends_on:
@@ -18,7 +16,6 @@ services:
       - .:/var/www/html/app/code/Latitude/Payment
       - .docker/tests/_output:/var/www/html/dev/tests/acceptance/tests/_output/
   db:
-    container_name: magento_latitude_mysql
     image: mysql:5.7
     ports:
       - "3306"

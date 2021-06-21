@@ -1,4 +1,4 @@
 #!/usr/bin/env bash
 set -e
 echo "Remove docker container"
-docker-compose down -v
+docker-compose down -v --remove-orphans
