@@ -1,0 +1,355 @@
+version: 2.1
+commands: # a reusable command with parameters
+  setup:
+    parameters:
+      version:
+        default: "php74-m237"
+        type: string
+    steps:
+      - checkout
+      - run:
+          # Our primary container isn't Nginx so run a sleep command until it's ready.
+          name: Waiting for Nginx to be ready
+          command: |
+            /bin/app/start.sh &
+            for i in `seq 1 100`;
+            do
+              nc -z 127.0.0.1 80 && echo Success && exit 0
+              echo -n .
+              sleep 1
+            done
+            echo Failed waiting for Nginx && exit 1
+      - run:
+          # Our primary container isn't MYSQL so run a sleep command until it's ready.
+          name: Waiting for MySQL to be ready
+          command: |
+            for i in `seq 1 100`;
+            do
+              nc -z 127.0.0.1 3306 && echo Success && exit 0
+              echo -n .
+              sleep 1
+            done
+            echo Failed waiting for MySQL && exit 1
+      - run:
+          # Our primary container isn't Elasticsearch so run a sleep command until it's ready.
+          name: Waiting for Elasticsearch to be ready
+          command: |
+            for i in `seq 1 100`;
+            do
+              nc -z 127.0.0.1 9200 && echo Success && exit 0
+              echo -n .
+              sleep 1
+            done
+            echo Failed waiting for MySQL && exit 1
+      - run:
+          # Our primary container isn't Selenium so run a sleep command until it's ready.
+          name: Waiting for Selenium to be ready
+          command: |
+            for i in `seq 1 100`;
+            do
+              nc -z 127.0.0.1 4444 && echo Success && exit 0
+              echo -n .
+              sleep 1
+            done
+            echo Failed waiting for Selenium && exit 1
+      - run:
+          name: "Install Magento 2"
+          command: |
+            cd /var/www/html
+            /bin/app/magento2/install.sh
+      - run:
+          name: "Setup Tests Environment"
+          command: |
+            cd /var/www/html
+            vendor/bin/mftf build:project --MAGENTO_BASE_URL=http://magento2.localhost/ --MAGENTO_BACKEND_NAME=admin --MAGENTO_ADMIN_USERNAME=admin --MAGENTO_ADMIN_PASSWORD=admin123
+            sed -i 's/chromeOptions:/"goog:chromeOptions":/g' dev/tests/acceptance/tests/functional.suite.yml
+            sed -i 's/"--disable-extensions",/"--disable-extensions","--no-sandbox", "--headless",/g' dev/tests/acceptance/tests/functional.suite.yml
+  cs-tests:
+    steps:
+      - run:
+         name: "Run PHP Copy/Paste Detector"
+         command: |
+           phpcpd --exclude Model/Payment/ --exclude vendor --exclude Test /var/www/html/app/code/Latitude/Payment
+      - run:
+         name: "PHP Mess Detector"
+         command: |
+          cd /var/www/html
+           phpmd app/code/Latitude/Payment text /var/www/html/app/code/Latitude/Payment/phpmd.xml --exclude vendor/,Test/
+      - run:
+         name: "PHP CodeSniffer"
+         command: |
+            phpcs --config-set show_warnings 0
+            phpcs --standard=Magento2 --extensions=php --ignore=*/vendor/,*/Test/ --colors -s -p -v /var/www/html/app/code/Latitude/Payment
+      # - run:
+      #    name: "Run Backward Compatibility Check"
+      #    command: |
+      #      vendor/bin/roave-backward-compatibility-check
+  m2-tests:
+    steps:
+      - run:
+          name: "Magento Default Functional Testing"
+          command: |
+            cd /var/www/html
+            vendor/bin/mftf run:test StorefrontCustomerCheckoutTest -r
+            vendor/bin/mftf run:test StorefrontGuestCheckoutTest -r
+      - run:
+          name: "Magento Default Unit Testing"
+          command: |
+            cd /var/www/html
+            vendor/bin/phpunit -c dev/tests/unit/phpunit.xml.dist app/code/Magento/Catalog/Test/Unit/ --testdox
+            vendor/bin/phpunit -c dev/tests/unit/phpunit.xml.dist app/code/Magento/Customer/Test/Unit/ --testdox
+            vendor/bin/phpunit -c dev/tests/unit/phpunit.xml.dist app/code/Magento/Checkout/Test/Unit/ --testdox
+            vendor/bin/phpunit -c dev/tests/unit/phpunit.xml.dist app/code/Magento/Payment/Test/Unit/ --testdox
+  lp-tests:
+    steps:
+      - run:
+          name: "LatitudePay Functional Testing"
+          command: |
+            cd /var/www/html
+            vendor/bin/mftf run:group latitudepay -r
+      - run:
+          name: "LatitudePay Unit Testing"
+          command: |
+            cd /var/www/html
+            vendor/bin/phpunit -c dev/tests/unit/phpunit.xml.dist app/code/Latitude/Payment/Test/Unit/ --testdox
+  artifacts:
+    steps:
+      - run:
+          name: "Generate Allure Report"
+          command: |
+            allure generate dev/tests/acceptance/tests/_output/ --clean -o dev/tests/acceptance/tests/_output/allure-report
+      - store_test_results:
+          path: /var/www/html/dev/tests/acceptance/tests/_output/allure-report
+      - store_artifacts:
+          path: /var/www/html/dev/tests/acceptance/tests/_output/allure-report
+jobs:
+  deploy:
+    docker:
+      - image: circleci/php:latest-node-browsers-legacy
+        environment:
+          - SSH_REMOTE_SERVER_USER=$SSH_REMOTE_SERVER_USER
+          - SSH_REMOTE_SERVER_IP=$SSH_REMOTE_SERVER_IP
+          - SSH_REMOTE_SERVER_HOST=$SSH_REMOTE_SERVER_HOST
+          - SSH_REMOTE_SERVER_ROOT=$SSH_REMOTE_SERVER_ROOT
+    working_directory: ~/latitude
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "SSH Fingerprint from CircleCI Project Settings > SSH Permissions"
+      - checkout
+      - run:
+          name: Build the plugin
+          command: |
+            mkdir -p /tmp/artifacts
+            mkdir -p build/
+            zip -r woocommerce-latitudepay-genoapay.zip build/
+            cp -a build/*.zip /tmp/artifacts
+      - run:
+          name: Deploy the plugin
+          command: |
+            if [ "${CIRCLE_BRANCH}" == "master" ]; then
+              ./bin/deploy.sh live
+            else
+              ./bin/deploy.sh --dry-run
+            fi
+      - store_artifacts:
+          path: /tmp/artifacts
+  github-release:
+    docker:
+      - image: circleci/php:latest-node-browsers-legacy
+        environment:
+          - GITHUB_TOKEN=$GITHUB_TOKEN
+          - GITHUB_APP_NAME=$GITHUB_APP_NAME
+          - GITHUB_USER=$GITHUB_USER
+    working_directory: ~/latitude
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "SSH Fingerprint from CircleCI Project Settings > SSH Permissions"
+      - checkout
+      - run:
+          name: Tag new release
+          command: |
+            cd ~/latitude
+            cd bin/
+            chmod +x git_release.sh
+            ./git_release.sh
+  php74-m237:
+    docker:
+      - image: registry.gitlab.com/magebinary/docker-opensource-ecommerce:magento-2.3.7-php-7.4
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASSWORD
+        environment:
+          - MYSQL_ROOT_HOST=%
+          - PLATFORM=magento2
+          - PLATFORM_VERSION=2.3.7
+          - MYSQL_ROOT_PASSWORD=magento2
+          - MYSQL_DATABASE=magento2
+          - MYSQL_USER=magento2
+          - MYSQL_PASSWORD=magento2
+          - MYSQL_DB_HOST=127.0.0.1
+          - BASE_URL=magento2.localhost
+          - INSTALL_SAMPLE_DATA=false
+          - MAGENTO_ADMIN_FRONTNAME=admin
+          - MAGENTO_ADMIN_FIRST_NAME=Admin
+          - MAGENTO_ADMIN_LAST_NAME=Developer
+          - MAGENTO_ADMIN_EMAIL=dev@magebinary.com
+          - MAGENTO_ADMIN_USER=admin
+          - MAGENTO_ADMIN_PASSWORD=admin123
+          - MAGENTO_LOCALE=en_AU
+          - MAGENTO_CURRENCY=AUD
+          - MAGENTO_TIMEZONE=Pacific/Auckland
+          - LATITUDE_API_PUBLIC_KEY=$LATITUDE_API_PUBLIC_KEY
+          - LATITUDE_API_PRIVATE_KEY=$LATITUDE_API_PRIVATE_KEY
+          - LATITUDE_USER_EMAIL=$LATITUDE_USER_EMAIL
+          - LATITUDE_USER_PASSWORD=$LATITUDE_USER_PASSWORD
+          - GENOAPAY_API_PUBLIC_KEY=$GENOAPAY_API_PUBLIC_KEY
+          - GENOAPAY_API_PRIVATE_KEY=$GENOAPAY_API_PRIVATE_KEY
+          - GENOAPAY_USER_EMAIL=$GENOAPAY_USER_EMAIL
+          - GENOAPAY_USER_PASSWORD=$GENOAPAY_USER_PASSWORD
+      - image: circleci/mysql:5.7
+        environment:
+          - MYSQL_ROOT_HOST=%
+          - MYSQL_ROOT_PASSWORD=magento2
+          - MYSQL_DATABASE=magento2
+          - MYSQL_USER=magento2
+          - MYSQL_PASSWORD=magento2
+      - image: magento/magento-cloud-docker-elasticsearch:6.8-1.2.4
+    working_directory: /var/www/html/app/code/Latitude/Payment
+    steps:
+      - setup:
+          version: "php74-m237"
+      - cs-tests
+      - lp-tests
+      - m2-tests
+      - artifacts
+  php73-m242:
+    docker:
+      - image: registry.gitlab.com/magebinary/docker-opensource-ecommerce:magento-2.4.2-php-7.3
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASSWORD
+        environment:
+          - MYSQL_ROOT_HOST=%
+          - PLATFORM=magento2
+          - PLATFORM_VERSION=2.4.2
+          - MYSQL_ROOT_PASSWORD=magento2
+          - MYSQL_DATABASE=magento2
+          - MYSQL_USER=magento2
+          - MYSQL_PASSWORD=magento2
+          - MYSQL_DB_HOST=127.0.0.1
+          - ES_HOST=127.0.0.1
+          - ES_PORT=9200
+          - BASE_URL=magento2.localhost
+          - INSTALL_SAMPLE_DATA=false
+          - SEARCH_ENGINE=elasticsearch7
+          - MAGENTO_ADMIN_FRONTNAME=admin
+          - MAGENTO_ADMIN_FIRST_NAME=Admin
+          - MAGENTO_ADMIN_LAST_NAME=Developer
+          - MAGENTO_ADMIN_EMAIL=dev@magebinary.com
+          - MAGENTO_ADMIN_USER=admin
+          - MAGENTO_ADMIN_PASSWORD=admin123
+          - MAGENTO_LOCALE=en_AU
+          - MAGENTO_CURRENCY=AUD
+          - MAGENTO_TIMEZONE=Pacific/Auckland
+          - LATITUDE_API_PUBLIC_KEY=$LATITUDE_API_PUBLIC_KEY
+          - LATITUDE_API_PRIVATE_KEY=$LATITUDE_API_PRIVATE_KEY
+          - LATITUDE_USER_EMAIL=$LATITUDE_USER_EMAIL
+          - LATITUDE_USER_PASSWORD=$LATITUDE_USER_PASSWORD
+          - GENOAPAY_API_PUBLIC_KEY=$GENOAPAY_API_PUBLIC_KEY
+          - GENOAPAY_API_PRIVATE_KEY=$GENOAPAY_API_PRIVATE_KEY
+          - GENOAPAY_USER_EMAIL=$GENOAPAY_USER_EMAIL
+          - GENOAPAY_USER_PASSWORD=$GENOAPAY_USER_PASSWORD
+      - image: circleci/mysql:5.7
+        environment:
+          - MYSQL_ROOT_HOST=%
+          - MYSQL_ROOT_PASSWORD=magento2
+          - MYSQL_DATABASE=magento2
+          - MYSQL_USER=magento2
+          - MYSQL_PASSWORD=magento2
+      - image: magento/magento-cloud-docker-elasticsearch:7.9-1.2.2
+    working_directory: /var/www/html/app/code/Latitude/Payment
+    steps:
+      - setup:
+          version: "php73-m242"
+      - cs-tests
+      - lp-tests
+      - m2-tests
+      - artifacts
+  php74-m242:
+    docker:
+      - image: registry.gitlab.com/magebinary/docker-opensource-ecommerce:magento-2.4.2-php-7.4
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASSWORD
+        environment:
+          - MYSQL_ROOT_HOST=%
+          - PLATFORM=magento2
+          - PLATFORM_VERSION=2.4.2
+          - MYSQL_ROOT_PASSWORD=magento2
+          - MYSQL_DATABASE=magento2
+          - MYSQL_USER=magento2
+          - MYSQL_PASSWORD=magento2
+          - MYSQL_DB_HOST=127.0.0.1
+          - ES_HOST=127.0.0.1
+          - ES_PORT=9200
+          - BASE_URL=magento2.localhost
+          - INSTALL_SAMPLE_DATA=false
+          - SEARCH_ENGINE=elasticsearch7
+          - MAGENTO_ADMIN_FRONTNAME=admin
+          - MAGENTO_ADMIN_FIRST_NAME=Admin
+          - MAGENTO_ADMIN_LAST_NAME=Developer
+          - MAGENTO_ADMIN_EMAIL=dev@magebinary.com
+          - MAGENTO_ADMIN_USER=admin
+          - MAGENTO_ADMIN_PASSWORD=admin123
+          - MAGENTO_LOCALE=en_AU
+          - MAGENTO_CURRENCY=AUD
+          - MAGENTO_TIMEZONE=Pacific/Auckland
+          - LATITUDE_API_PUBLIC_KEY=$LATITUDE_API_PUBLIC_KEY
+          - LATITUDE_API_PRIVATE_KEY=$LATITUDE_API_PRIVATE_KEY
+          - LATITUDE_USER_EMAIL=$LATITUDE_USER_EMAIL
+          - LATITUDE_USER_PASSWORD=$LATITUDE_USER_PASSWORD
+          - GENOAPAY_API_PUBLIC_KEY=$GENOAPAY_API_PUBLIC_KEY
+          - GENOAPAY_API_PRIVATE_KEY=$GENOAPAY_API_PRIVATE_KEY
+          - GENOAPAY_USER_EMAIL=$GENOAPAY_USER_EMAIL
+          - GENOAPAY_USER_PASSWORD=$GENOAPAY_USER_PASSWORD
+      - image: circleci/mysql:5.7
+        environment:
+          - MYSQL_ROOT_HOST=%
+          - MYSQL_ROOT_PASSWORD=magento2
+          - MYSQL_DATABASE=magento2
+          - MYSQL_USER=magento2
+          - MYSQL_PASSWORD=magento2
+      - image: magento/magento-cloud-docker-elasticsearch:7.9-1.2.2
+    working_directory: /var/www/html/app/code/Latitude/Payment
+    steps:
+      - setup:
+          version: "php74-m242"
+      - cs-tests
+      - lp-tests
+      - m2-tests
+      - artifacts
+workflows:
+  version: 2
+  main:
+    jobs:
+      - php74-m237
+      - php73-m242
+      - php74-m242
+      - github-release:
+          requires:
+            - php74-m237
+            - php73-m242
+            - php74-m242
+          filters:
+            branches:
+              only: master
+      - deploy:
+          requires:
+            - php74-m237
+            - php73-m242
+            - php74-m242
+          filters:
+            branches:
+              only: staging

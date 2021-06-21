@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="NZ_Address_AUK" type="address">
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="company">Magento</data>
+        <array key="street">
+            <item>7700 West Parmer Lane</item>
+        </array>
+        <data key="city">Austin</data>
+        <data key="state">Texas</data>
+        <data key="country_id">NZ</data>
+        <data key="country">New Zealand</data>
+        <data key="postcode">78729</data>
+        <data key="telephone">512-345-6789</data>
+        <data key="default_billing">Yes</data>
+        <data key="default_shipping">Yes</data>
+        <requiredEntity type="region">Region_NZ_AUK</requiredEntity>
+    </entity>
+    <entity name="NZ_Address_AUK_Without_Default" type="address">
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="company">Magento</data>
+        <array key="street">
+            <item>7700 West Parmer Lane</item>
+        </array>
+        <data key="city">Austin</data>
+        <data key="state">Auckland</data>
+        <data key="country_id">NZ</data>
+        <data key="country">New Zealand</data>
+        <data key="postcode">3000</data>
+        <data key="telephone">512-345-6789</data>
+        <requiredEntity type="region">Region_NZ_AUK</requiredEntity>
+    </entity>
+    <entity name="NZ_Address_AUK_Default_Billing" type="address">
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="company">Magento</data>
+        <array key="street">
+            <item>7700 West Parmer Lane</item>
+        </array>
+        <data key="city">Auckland</data>
+        <data key="state">Auckland</data>
+        <data key="country_id">NZ</data>
+        <data key="country">New Zealand</data>
+        <data key="postcode">3000</data>
+        <data key="telephone">512-345-6789</data>
+        <data key="default_billing">Yes</data>
+        <requiredEntity type="region">Region_NZ_AUK</requiredEntity>
+    </entity>
+    <entity name="NZ_Address_NSW" type="address">
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="company">368</data>
+        <array key="street">
+            <item>368 Broadway St.</item>
+            <item>113</item>
+        </array>
+        <data key="city">Wellington</data>
+        <data key="state">Wellington</data>
+        <data key="country_id">NZ</data>
+        <data key="postcode">2000</data>
+        <data key="telephone">512-345-6789</data>
+        <data key="default_billing">Yes</data>
+        <data key="default_shipping">Yes</data>
+        <requiredEntity type="region">Region_NZ_NSW</requiredEntity>
+        <data key="country">New Zealand</data>
+    </entity>
+    <entity name="NZ_Address_NSW_Default_Shipping" type="address">
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="company">368</data>
+        <array key="street">
+            <item>368 Broadway St.</item>
+            <item>113</item>
+        </array>
+        <data key="city">Wellington</data>
+        <data key="state">Wellington</data>
+        <data key="country_id">NZ</data>
+        <data key="postcode">2000</data>
+        <data key="telephone">512-345-6789</data>
+        <data key="default_shipping">Yes</data>
+        <requiredEntity type="region">Region_NZ_NSW</requiredEntity>
+        <data key="country">New Zealand</data>
+    </entity>
+    <entity name="NZ_Address_NSW_Not_Default_Address" type="address">
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="company">368</data>
+        <array key="street">
+            <item>368 Broadway St.</item>
+            <item>Apt. 113</item>
+        </array>
+        <data key="city">Wellington</data>
+        <data key="state">Wellington</data>
+        <data key="country_id">NZ</data>
+        <data key="postcode">2000</data>
+        <data key="telephone">512-345-6789</data>
+        <requiredEntity type="region">Region_NZ_NSW</requiredEntity>
+        <data key="country">New Zealand</data>
+    </entity>
+</entities>

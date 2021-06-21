@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontLatitudepayCheckoutSection">
+        <element name="LatitudepayPaymentRadio" type="radio" selector="input#latitudepay.radio" timeout="30"/>
+        <element name="LatitudepayPaymentContent" type="block" selector=".payment-method._active div.payment-method-content" timeout="30"/>
+        <element name="LatitudepayPaymentPlaceOrderButton" type="block" selector=".payment-method._active button.checkout" timeout="30"/>
+    </section>
+</sections>

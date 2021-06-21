@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="LatitudepayPaymentMethodConfigSection">
+        <element name="configGroupTab" type="block" selector="#payment_{{countryCode}}_latitude_section-head" parameterized="true"/>
+        <element name="settingTab" type="block" selector="#payment_{{countryCode}}_latitude_section_latitude" parameterized="true"/>
+        <element name="configureBtn" type="button" selector="#payment_{{countryCode}}_latitude_section_latitude-head" parameterized="true"/>
+        <element name="clientKeyInput" type="input" selector="#payment_{{countryCode}}_latitude_section_latitude_client_key" parameterized="true"/>
+        <element name="clientSecretInput" type="input" selector="#payment_{{countryCode}}_latitude_section_latitude_client_secret" parameterized="true"/>
+        <element name="environmentSelect" type="select" selector="#payment_{{countryCode}}_latitude_section_latitude_environment" parameterized="true"/>
+        <element name="enabledSelect" type="select" selector="#payment_{{countryCode}}_latitude_section_latitude_enabled" parameterized="true"/>
+    </section>
+</sections>

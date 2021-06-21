@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminConfigGenoapayPaymentMethodTest">
+        <annotations>
+            <features value="Genoapay"/>
+            <stories value="Genoapay admin config"/>
+            <title value="Genoapay admin config"/>
+            <description value="Genoapay admin config"/>
+            <severity value="MAJOR"/>
+            <group value="genoapay"/>
+            <group value="latitude"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="ConfigGenoapayActionGroup" stepKey="configGenoapayActionGroup">
+            <argument name="credentials" value="SampleGenoapayConfig"/>
+        </actionGroup>
+    </test>
+</tests>

@@ -44,11 +44,7 @@ class Fail extends GetToken
                 $this->messageManager->addSuccessMessage(
                     __('Checkout and Order have been canceled.')
                 );
-            } else {
-                $this->messageManager->addSuccessMessage(
-                    __('Checkout has been canceled.')
-                );
-            }
+            } 
 
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addExceptionMessage($e, $e->getMessage());

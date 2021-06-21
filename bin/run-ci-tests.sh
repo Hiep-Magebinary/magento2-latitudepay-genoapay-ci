@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+circleci local execute --job php73-build --branch ci-cd --skip-checkout -e DOCKER_USER=hiep3 -e DOCKER_PASSWORD=nN_8CUoSLfKAiWF3Tgcy -e LATITUDE_API_PUBLIC_KEY=p5bya2FY -e LATITUDE_API_PRIVATE_KEY=zMvKyq1qD5JqrExU -e LATITUDE_USER_EMAIL=hiep+lpay-cicd@magebinary.com -e LATITUDE_USER_PASSWORD=BotBot@1 GENOAPAY_API_PUBLIC_KEY=lqFndD0Y -e GENOAPAY_API_PRIVATE_KEY=3ot3qhrXVVWdLi1I -e GENOAPAY_USER_EMAIL=hiep+gpay5@magebinary.com -e GENOAPAY_USER_PASSWORD=BotBot@1

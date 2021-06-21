@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="DisableGenoapayPaymentMethod">
+        <data key="path">payment/genoapay/enabled</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="EnableGenoapayPaymentMethod">
+        <!-- Magento default value -->
+        <data key="path">payment/genoapay/enabled</data>
+        <data key="label">Yes</data>
+        <data key="value">1</data>
+    </entity>
+
+    <entity name="NotShowInMobileGenoapayPaymentMethod">
+        <data key="path">payment/genoapay/show_in_mobile</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="ShowInMobileGenoapayPaymentMethod">
+        <!-- Magento default value -->
+        <data key="path">payment/genoapay/show_in_mobile</data>
+        <data key="label">Yes</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="SetDefaultCurrencyNZDConfig">
+        <data key="path">currency/options/default</data>
+        <data key="value">NZD</data>
+        <data key="scope">websites</data>
+        <data key="scope_code">base</data>
+    </entity>
+
+    <entity name="SetGenoapaySandboxMode">
+        <data key="path">payment/genoapay/environment</data>
+        <data key="value">sandbox</data>
+        <data key="scope">websites</data>
+        <data key="scope_code">base</data>
+    </entity>
+    <entity name="SetGenoapaySandboxClientKey">
+        <data key="path">payment/genoapay/client_key</data>
+        <data key="value">eba54d98</data>
+        <data key="scope">websites</data>
+        <data key="scope_code">base</data>
+    </entity>
+    <entity name="SetGenoapaySandboxClientSecret">
+        <data key="path">payment/genoapay/client_secret</data>
+        <data key="value">a9ecd8d1b0d000c8</data>
+        <data key="scope">websites</data>
+        <data key="scope_code">base</data>
+    </entity>
+</entities>

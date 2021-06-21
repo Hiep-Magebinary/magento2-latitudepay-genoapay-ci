@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="ConfigGenoapayActionGroup">
+        <annotations>
+            <description>Goes to the 'Configuration' page for 'Payment Methods'. Fills in the provided Genoapay credentials and other details. Clicks on Save.</description>
+        </annotations>
+        <arguments>
+            <argument name="credentials" defaultValue="_CREDS"/>
+            <argument name="countryCode" type="string" defaultValue="nz"/>
+        </arguments>
+
+        <amOnPage url="{{AdminConfigPaymentMethodsPage.url}}" stepKey="navigateToPaymentConfigurationPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad1" time="20"/>
+
+        <!-- Change Merchant Country -->
+        <comment userInput="Change Merchant Country" stepKey="changeMerchantCountryComment"/>
+        <waitForElementVisible selector="{{PaymentsConfigSection.merchantCountry}}" stepKey="waitForMerchantCountry"/>
+        <selectOption selector="{{PaymentsConfigSection.merchantCountry}}" userInput="New Zealand" stepKey="setMerchantCountry"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+
+        <click selector="{{LatitudepayPaymentMethodConfigSection.configGroupTab(countryCode)}}" stepKey="clickLatitudepayConfigureSection"/>
+
+
+        <click selector="{{GenoapayPaymentMethodConfigSection.configureBtn(countryCode)}}" stepKey="clickGenoapayConfigureBtn"/>
+        <waitForElementVisible selector="{{GenoapayPaymentMethodConfigSection.settingTab(countryCode)}}" stepKey="waitForSettingTab"/>
+        <fillField selector ="{{GenoapayPaymentMethodConfigSection.clientKeyInput(countryCode)}}" userInput="{{credentials.magento/genoapay_us_client_key}}" stepKey="inputAPIClientKey"/>
+        <fillField selector ="{{GenoapayPaymentMethodConfigSection.clientSecretInput(countryCode)}}" userInput="{{credentials.magento/genoapay_us_client_secret}}" stepKey="inputAPIClientSecret"/>
+        <selectOption selector ="{{GenoapayPaymentMethodConfigSection.environmentSelect(countryCode)}}" userInput="Sandbox" stepKey="environmentSanbox"/>
+        <selectOption selector="{{GenoapayPaymentMethodConfigSection.enabledSelect(countryCode)}}" userInput="Yes" stepKey="enableGenoapay"/>
+        <!--Save configuration-->
+        <click selector="{{AdminConfigSection.saveButton}}" stepKey="saveConfig"/>
+    </actionGroup>
+</actionGroups>
