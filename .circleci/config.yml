@@ -338,12 +338,12 @@ workflows:
   version: 2
   main:
     jobs:
-      - php74-m237
+      # - php74-m237
       - php73-m242
       - php74-m242
       - github-release:
           requires:
-            - php74-m237
+            # - php74-m237
             - php73-m242
             - php74-m242
           filters:
@@ -351,7 +351,7 @@ workflows:
               only: master
       - deploy:
           requires:
-            - php74-m237
+            # - php74-m237
             - php73-m242
             - php74-m242
           filters:
