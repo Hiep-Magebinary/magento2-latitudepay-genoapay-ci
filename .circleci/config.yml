@@ -125,13 +125,14 @@ commands: # a reusable command with parameters
 jobs:
   deploy:
     docker:
-      - image: circleci/php:latest-node-browsers-legacy
+      - image: registry.gitlab.com/magebinary/docker-opensource-ecommerce:magento-2.4.2-php-7.4
         environment:
           - SSH_REMOTE_SERVER_USER=$SSH_REMOTE_SERVER_USER
           - SSH_REMOTE_SERVER_IP=$SSH_REMOTE_SERVER_IP
           - SSH_REMOTE_SERVER_HOST=$SSH_REMOTE_SERVER_HOST
           - SSH_REMOTE_SERVER_ROOT=$SSH_REMOTE_SERVER_ROOT
-    working_directory: ~/latitude
+          - SSH_REMOTE_SERVER_GIT_BRANCH=$SSH_REMOTE_SERVER_GIT_BRANCH
+    working_directory: /var/www/html/app/code/Latitude/Payment
     steps:
       - add_ssh_keys:
           fingerprints:

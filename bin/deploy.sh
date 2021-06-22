@@ -14,7 +14,7 @@ SSH_EXTRA="-o PubkeyAuthentication=no -o StrictHostKeyChecking=no"
 # Required for CircleCI to allow SSH connections to remote server
 # example: ssh-keyscan 123.456.789.123 >> ~/.ssh/known_hosts
 #ssh-keyscan ${SSH_REMOTE_SERVER_IP} >> ~/.ssh/known_hosts
-cd ~/latitude
+cd /var/www/html/app/code/Latitude/Payment
 
 if [ $# -eq 0 ]
 	then
