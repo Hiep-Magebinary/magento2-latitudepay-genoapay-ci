@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCheckLatitudepaySnippetTest">
+        <annotations>
+            <features value="Latitudepay"/>
+            <stories value="Latitudepay Snippet display On Checkout Page"/>
+            <title value="Check Latitude Snippet display On Checkout Page"/>
+            <description value="Latitude Snippet able display On Checkout Page"/>
+            <severity value="MAJOR"/>
+            <group value="latitudepay"/>
+            <group value="latitude"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <!-- Create Customer -->
+            <createData entity="Simple_AU_Customer" after="createProduct" stepKey="createAUCustomer"/>
+
+            <actionGroup ref="CliEnableLatitudepayPaymentMethodActionGroup" stepKey="enableLatitudepay"/>
+
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </before>
+        <after>
+            <actionGroup ref="CliDisableLatitudepayPaymentMethodActionGroup" stepKey="disableLatitudepay"/>
+             <!-- Delete products -->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <!-- Delete Category -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+
+            <!--Logout from customer account-->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" before="deleteAUCustomer" stepKey="logoutAUCustomer"/>
+            <!--Delete customer -->
+            <deleteData createDataKey="createAUCustomer" stepKey="deleteAUCustomer"/>
+        </after>
+
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrl" value="$createProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductDetailPageLatitudepaySnippetActionGroup" stepKey="assertProductDetailPageSnippet">
+            <argument name="installmentText" value="weekly payments of"/>
+        </actionGroup>
+
+        <amOnPage url="/" stepKey="goToHomePage"/>
+        <!--Login to storefront as previously created customer-->
+        <actionGroup ref="LoginToStorefrontActionGroup" before="goToLatitudeSnippetCheckoutPage" stepKey="loginAsCustomer">
+            <argument name="Customer" value="$createAUCustomer$"/>
+        </actionGroup>
+
+        <actionGroup ref="AddProductToCheckoutPageLatitudepayActionGroup" stepKey="goToLatitudeSnippetCheckoutPage">
+            <argument name="Category" value="$createCategory$"/>
+        </actionGroup>
+    </test>
+</tests>

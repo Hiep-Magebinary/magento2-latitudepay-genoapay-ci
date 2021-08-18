@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminConfigLatitudepayPaymentMethodTest">
+        <annotations>
+            <features value="Latitudepay"/>
+            <stories value="Latitudepay admin config"/>
+            <title value="Latitudepay admin config"/>
+            <description value="Latitudepay admin config"/>
+            <severity value="MAJOR"/>
+            <group value="latitudepay"/>
+            <group value="latitude"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="ConfigLatitudepayActionGroup" stepKey="configLatitudepayActionGroup">
+            <argument name="credentials" value="SampleLatitudepayConfig"/>
+        </actionGroup>
+    </test>
+</tests>

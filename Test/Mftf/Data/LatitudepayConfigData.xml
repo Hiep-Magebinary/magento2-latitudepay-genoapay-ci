@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="DisableLatitudepayPaymentMethod">
+        <data key="path">payment/latitudepay/enabled</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="EnableLatitudepayPaymentMethod">
+        <!-- Magento default value -->
+        <data key="path">payment/latitudepay/enabled</data>
+        <data key="label">Yes</data>
+        <data key="value">1</data>
+    </entity>
+
+    <entity name="NotShowInMobileLatitudepayPaymentMethod">
+        <data key="path">payment/latitudepay/show_in_mobile</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="ShowInMobileLatitudepayPaymentMethod">
+        <!-- Magento default value -->
+        <data key="path">payment/latitudepay/show_in_mobile</data>
+        <data key="label">Yes</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="SetDefaultCurrencyAUDConfig">
+        <data key="path">currency/options/default</data>
+        <data key="value">AUD</data>
+        <data key="scope">websites</data>
+        <data key="scope_code">base</data>
+    </entity>
+
+    <entity name="SetLatitudepaySandboxMode">
+        <data key="path">payment/latitudepay/environment</data>
+        <data key="value">sandbox</data>
+        <data key="scope">websites</data>
+        <data key="scope_code">base</data>
+    </entity>
+    <entity name="SetLatitudepaySandboxClientKey">
+        <data key="path">payment/latitudepay/client_key</data>
+        <data key="value">eba54d98</data>
+        <data key="scope">websites</data>
+        <data key="scope_code">base</data>
+    </entity>
+    <entity name="SetLatitudepaySandboxClientSecret">
+        <data key="path">payment/latitudepay/client_secret</data>
+        <data key="value">a9ecd8d1b0d000c8</data>
+        <data key="scope">websites</data>
+        <data key="scope_code">base</data>
+    </entity>
+    <entity name="SetDisableSendMail">
+        <data key="path">system/smtp/disable</data>
+        <data key="value">1</data>
+        <data key="scope">websites</data>
+        <data key="scope_code">base</data>
+    </entity>
+</entities>

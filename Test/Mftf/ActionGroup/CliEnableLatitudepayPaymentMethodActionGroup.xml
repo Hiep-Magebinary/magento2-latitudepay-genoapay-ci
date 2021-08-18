@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CliEnableLatitudepayPaymentMethodActionGroup">
+        <annotations>
+            <description>Enable Latitudepay payment method by CLI command config:set</description>
+        </annotations>
+
+        <magentoCLI command="config:set {{SetDisableSendMail.path}} {{SetDisableSendMail.value}}" stepKey="setDisableSendMail"/>
+
+        <!--Set Currency options for Default Config-->
+        <magentoCLI command="config:set {{SetCurrencyAUDBaseConfig.path}} {{SetCurrencyAUDBaseConfig.value}}" stepKey="setCurrencyBaseAUD"/>
+        <magentoCLI command="config:set {{SetAllowedCurrenciesConfigForUSD.path}} {{SetAllowedCurrenciesConfigForUSD.value}},{{SetAllowedCurrenciesConfigForAUD.value}},{{SetAllowedCurrenciesConfigForNZD.value}}" stepKey="setAllowedCurrencyAUDRandUSD"/>
+        <magentoCLI command="config:set {{SetDefaultCurrencyAUDConfig.path}} {{SetDefaultCurrencyAUDConfig.value}}" stepKey="setCurrencyDefaultAUD"/>
+        <!--Set Currency options for Website-->
+        <magentoCLI command="config:set --scope={{SetCurrencyUSDBaseConfig.scope}} --scope-code={{SetCurrencyUSDBaseConfig.scope_code}} {{SetCurrencyUSDBaseConfig.path}} {{SetCurrencyUSDBaseConfig.value}}" stepKey="setCurrencyBaseAUDWebsites"/>
+        <magentoCLI command="config:set --scope={{SetAllowedCurrenciesConfigForUSD.scope}} --scope-code={{SetAllowedCurrenciesConfigForUSD.scope_code}} {{SetAllowedCurrenciesConfigForUSD.path}} {{SetAllowedCurrenciesConfigForUSD.value}},{{SetAllowedCurrenciesConfigForAUD.value}},{{SetAllowedCurrenciesConfigForNZD.value}}" stepKey="setAllowedCurrencyWebsitesForAUDandUSD"/>
+        <magentoCLI command="config:set --scope={{SetDefaultCurrencyAUDConfig.scope}} --scope-code={{SetDefaultCurrencyAUDConfig.scope_code}} {{SetDefaultCurrencyAUDConfig.path}} {{SetDefaultCurrencyAUDConfig.value}}" stepKey="setCurrencyDefaultAUDWebsites"/>
+
+        <!--Config Latitudepay for Default-->
+        <magentoCLI command="config:set {{EnableLatitudepayPaymentMethod.path}} {{EnableLatitudepayPaymentMethod.value}}" stepKey="enableLatitudepayPaymentMethod"/>
+        <magentoCLI command="config:set {{ShowInMobileLatitudepayPaymentMethod.path}} {{ShowInMobileLatitudepayPaymentMethod.value}}" stepKey="showInMobileLatitudepayPaymentMethod"/>
+    </actionGroup>
+</actionGroups>

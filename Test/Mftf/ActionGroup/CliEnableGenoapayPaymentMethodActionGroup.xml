@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CliEnableGenoapayPaymentMethodActionGroup">
+        <annotations>
+            <description>Enable Genoapay payment method by CLI command config:set</description>
+        </annotations>
+        <!--Set Currency options for Default Config-->
+        <magentoCLI command="config:set {{SetAllowedCurrenciesConfigForUSD.path}} {{SetAllowedCurrenciesConfigForUSD.value}},{{SetAllowedCurrenciesConfigForNZD.value}},{{SetAllowedCurrenciesConfigForAUD.value}}" stepKey="setAllowedCurrencyNZDRandUSD"/>
+        <magentoCLI command="config:set {{SetCurrencyNZDBaseConfig.path}} {{SetCurrencyNZDBaseConfig.value}}" stepKey="setCurrencyBaseNZD"/>
+        <magentoCLI command="config:set {{SetDefaultCurrencyNZDConfig.path}} {{SetDefaultCurrencyNZDConfig.value}}" stepKey="setCurrencyDefaultNZD"/>
+        <!--Set Currency options for Website-->
+        <magentoCLI command="config:set --scope={{SetAllowedCurrenciesConfigForUSD.scope}} --scope-code={{SetAllowedCurrenciesConfigForUSD.scope_code}} {{SetAllowedCurrenciesConfigForUSD.path}} {{SetAllowedCurrenciesConfigForUSD.value}},{{SetAllowedCurrenciesConfigForNZD.value}},{{SetAllowedCurrenciesConfigForAUD.value}}" stepKey="setAllowedCurrencyWebsitesForNZDandUSD"/>
+        <magentoCLI command="config:set --scope={{SetCurrencyUSDBaseConfig.scope}} --scope-code={{SetCurrencyUSDBaseConfig.scope_code}} {{SetCurrencyUSDBaseConfig.path}} {{SetCurrencyUSDBaseConfig.value}}" stepKey="setCurrencyBaseNZDWebsites"/>
+        <magentoCLI command="config:set --scope={{SetDefaultCurrencyNZDConfig.scope}} --scope-code={{SetDefaultCurrencyNZDConfig.scope_code}} {{SetDefaultCurrencyNZDConfig.path}} {{SetDefaultCurrencyNZDConfig.value}}" stepKey="setCurrencyDefaultNZDWebsites"/>
+
+        <magentoCLI command="config:set {{EnableGenoapayPaymentMethod.path}} {{EnableGenoapayPaymentMethod.value}}" stepKey="enableGenoapayPaymentMethod"/>
+        <magentoCLI command="config:set {{ShowInMobileGenoapayPaymentMethod.path}} {{ShowInMobileGenoapayPaymentMethod.value}}" stepKey="showInMobileGenoapayPaymentMethod"/>
+    </actionGroup>
+</actionGroups>

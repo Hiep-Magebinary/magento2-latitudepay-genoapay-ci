@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="AU_Address_VIC" type="address">
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="company">Magento</data>
+        <array key="street">
+            <item>7700 West Parmer Lane</item>
+        </array>
+        <data key="city">Austin</data>
+        <data key="state">Texas</data>
+        <data key="country_id">AU</data>
+        <data key="country">Australia</data>
+        <data key="postcode">78729</data>
+        <data key="telephone">512-345-6789</data>
+        <data key="default_billing">Yes</data>
+        <data key="default_shipping">Yes</data>
+        <requiredEntity type="region">Region_AU_VIC</requiredEntity>
+    </entity>
+    <entity name="AU_Address_VIC_Without_Default" type="address">
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="company">Magento</data>
+        <array key="street">
+            <item>7700 West Parmer Lane</item>
+        </array>
+        <data key="city">Austin</data>
+        <data key="state">Melburn</data>
+        <data key="country_id">AU</data>
+        <data key="country">Australia</data>
+        <data key="postcode">3000</data>
+        <data key="telephone">512-345-6789</data>
+        <requiredEntity type="region">Region_AU_VIC</requiredEntity>
+    </entity>
+    <entity name="AU_Address_VIC_Default_Billing" type="address">
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="company">Magento</data>
+        <array key="street">
+            <item>7700 West Parmer Lane</item>
+        </array>
+        <data key="city">Melburn</data>
+        <data key="state">Melburn</data>
+        <data key="country_id">AU</data>
+        <data key="country">Australia</data>
+        <data key="postcode">3000</data>
+        <data key="telephone">512-345-6789</data>
+        <data key="default_billing">Yes</data>
+        <requiredEntity type="region">Region_AU_VIC</requiredEntity>
+    </entity>
+    <entity name="AU_Address_NSW" type="address">
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="company">368</data>
+        <array key="street">
+            <item>368 Broadway St.</item>
+            <item>113</item>
+        </array>
+        <data key="city">Sydney</data>
+        <data key="state">Sydney</data>
+        <data key="country_id">AU</data>
+        <data key="postcode">2000</data>
+        <data key="telephone">512-345-6789</data>
+        <data key="default_billing">Yes</data>
+        <data key="default_shipping">Yes</data>
+        <requiredEntity type="region">Region_AU_NSW</requiredEntity>
+        <data key="country">Australia</data>
+    </entity>
+    <entity name="AU_Address_NSW_Default_Shipping" type="address">
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="company">368</data>
+        <array key="street">
+            <item>368 Broadway St.</item>
+            <item>113</item>
+        </array>
+        <data key="city">Sydney</data>
+        <data key="state">Sydney</data>
+        <data key="country_id">AU</data>
+        <data key="postcode">2000</data>
+        <data key="telephone">512-345-6789</data>
+        <data key="default_shipping">Yes</data>
+        <requiredEntity type="region">Region_AU_NSW</requiredEntity>
+        <data key="country">Australia</data>
+    </entity>
+    <entity name="AU_Address_NSW_Not_Default_Address" type="address">
+        <data key="firstname">John</data>
+        <data key="lastname">Doe</data>
+        <data key="company">368</data>
+        <array key="street">
+            <item>368 Broadway St.</item>
+            <item>Apt. 113</item>
+        </array>
+        <data key="city">Sydney</data>
+        <data key="state">Sydney</data>
+        <data key="country_id">AU</data>
+        <data key="postcode">2000</data>
+        <data key="telephone">512-345-6789</data>
+        <requiredEntity type="region">Region_AU_NSW</requiredEntity>
+        <data key="country">Australia</data>
+    </entity>
+</entities>

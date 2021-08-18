@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="SampleLatitudepayConfig" type="latitudepay_config_state">
+        <requiredEntity type="client_key">LatitudepaySampleClientKey</requiredEntity>
+        <requiredEntity type="client_secret">LatitudepaySampleClientSecret</requiredEntity>
+    </entity>
+    <entity name="LatitudepaySampleClientKey" type="client_key">
+        <data key="value">eba54d98</data>
+    </entity>
+    <entity name="LatitudepaySampleClientSecret" type="client_secret">
+        <data key="value">a9ecd8d1b0d000c8</data>
+    </entity>
+</entities>

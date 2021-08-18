@@ -34,6 +34,7 @@
                 <api_url_production>https://api.latitudepay.com/v3</api_url_production>
                 <api_url_sandbox>https://api.uat.latitudepay.com/v3</api_url_sandbox>
                 <show_in_mobile>1</show_in_mobile>
+                <sort_order>5</sort_order>
             </latitudepay>
             <genoapay>
                 <active>1</active>
@@ -58,6 +59,7 @@
                 <api_url_production>https://api.genoapay.com/v3</api_url_production>
                 <api_url_sandbox>https://api.uat.genoapay.com/v3</api_url_sandbox>
                 <show_in_mobile>1</show_in_mobile>
+                <sort_order>5</sort_order>
             </genoapay>
         </payment>
     </default>

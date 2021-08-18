@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="Region_AU_ACT" type="region">
+        <data key="region">Australian Capital Territory</data>
+        <data key="region_code">ACT</data>
+        <data key="region_id">569</data>
+    </entity>
+    <entity name="Region_AU_NSW" type="region">
+        <data key="region">New South Wales</data>
+        <data key="region_code">NSW</data>
+        <data key="region_id">570</data>
+    </entity>
+    <entity name="Region_AU_VIC" type="region">
+        <data key="region">Victoria</data>
+        <data key="region_code">VIC</data>
+        <data key="region_id">571</data>
+    </entity>
+    <entity name="Region_AU_QLD" type="region">
+        <data key="region">Queensland</data>
+        <data key="region_code">QLD</data>
+        <data key="region_id">572</data>
+    </entity>
+    <entity name="Region_AU_NT" type="region">
+        <data key="region">Northern Territory</data>
+        <data key="region_code">NT</data>
+        <data key="region_id">576</data>
+    </entity>
+    <entity name="Region_AU_TAS" type="region">
+        <data key="region">Tasmania</data>
+        <data key="region_code">TAS</data>
+        <data key="region_id">574</data>
+    </entity>
+    <entity name="Region_AU_TAS" type="region">
+        <data key="region">Western Australia</data>
+        <data key="region_code">WA</data>
+        <data key="region_id">575</data>
+    </entity>
+</entities>

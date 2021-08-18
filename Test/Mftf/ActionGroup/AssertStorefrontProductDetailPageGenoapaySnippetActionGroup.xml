@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertStorefrontProductDetailPageGenoapaySnippetActionGroup">
+        <arguments>
+            <argument name="installmentText" type="string"/>
+        </arguments>
+        <see userInput="{{installmentText}}" selector="{{StorefrontGenoapayProductInfoMainSection.GenoapaySnippetInstallmentText}}" stepKey="seeInstallmentText"/>
+        <click selector="{{StorefrontGenoapayProductInfoMainSection.GenoapaySnippetLearnMoreText}}" stepKey="selectFirstShippingMethod"/>
+        <waitForElementVisible selector="{{StorefrontGenoapayProductInfoMainSection.GenoapaySnippetPopup}}" time="30" stepKey="waitForPopupVisible"/>
+    </actionGroup>
+</actionGroups>

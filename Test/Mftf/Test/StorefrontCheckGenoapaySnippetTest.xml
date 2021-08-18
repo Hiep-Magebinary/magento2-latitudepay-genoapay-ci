@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCheckGenoapaySnippetTest">
+        <annotations>
+            <features value="Genoapay"/>
+            <stories value="Genoapay Snippet display On Checkout Page"/>
+            <title value="Check Genoapay Snippet display On Checkout Page"/>
+            <description value="Genoapay Snippet able display On Checkout Page"/>
+            <severity value="MAJOR"/>
+            <group value="genoapay"/>
+            <group value="latitude"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <!-- Create Customer -->
+            <createData entity="Simple_NZ_Customer" after="createProduct" stepKey="createNZCustomer"/>
+
+            <actionGroup ref="CliEnableGenoapayPaymentMethodActionGroup" stepKey="enableGenoapay"/>
+
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </before>
+        <after>
+            <actionGroup ref="CliDisableGenoapayPaymentMethodActionGroup" stepKey="disableGenoapay"/>
+             <!-- Delete products -->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <!-- Delete Category -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+
+            <!--Logout from customer account-->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" before="deleteNZCustomer" stepKey="logoutNZCustomer"/>
+
+            <!--Delete customer -->
+            <deleteData createDataKey="createNZCustomer" stepKey="deleteNZCustomer"/>
+        </after>
+
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
+            <argument name="productUrl" value="$createProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductDetailPageGenoapaySnippetActionGroup" stepKey="assertProductDetailPageSnippet">
+            <argument name="installmentText" value="weekly payments of"/>
+        </actionGroup>
+
+        <!--Login to storefront as previously created customer-->
+        <actionGroup ref="LoginToStorefrontActionGroup" before="goToGenoapaySnippetCheckoutPage" stepKey="loginAsNZCustomer">
+            <argument name="Customer" value="$createNZCustomer$"/>
+        </actionGroup>
+
+        <actionGroup ref="AddProductToCheckoutPageGenoapayActionGroup" stepKey="goToGenoapaySnippetCheckoutPage">
+            <argument name="Category" value="$createCategory$"/>
+        </actionGroup>
+    </test>
+</tests>
